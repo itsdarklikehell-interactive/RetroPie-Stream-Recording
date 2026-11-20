@@ -7,4 +7,15 @@ on:
   workflow_dispatch:
 jobs:
   ci:
-    uses: itsdarklikehell/ci-templates/.github/workflows/ci-generic.yml@v1
+    uses: itsdarklikehell-interactive/ci-templates/.github/workflows/ci-generic.yml@v1
+    with:
+      dockerfile: ""
+
+  ci-status:
+    name: CI
+    needs: ci
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require reusable CI success
+        run: test "${{ needs.ci.result }}" = "success"
